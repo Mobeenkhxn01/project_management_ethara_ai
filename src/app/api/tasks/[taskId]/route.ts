@@ -56,3 +56,42 @@ export async function PATCH(
 
   return NextResponse.json({ task })
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: Promise<{ taskId: string }> }
+) {
+  const { taskId } = await params
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
+  const existingTask = await prisma.task.findUnique({
+    where: { id: taskId },
+    include: {
+      project: {
+        include: { members: true },
+      },
+    },
+  })
+
+  if (!existingTask) {
+    return NextResponse.json({ error: "Task not found" }, { status: 404 })
+  }
+
+  const currentMember = existingTask.project.members.find(
+    (m) => m.userId === session.user.id
+  )
+
+  if (currentMember?.role !== "ADMIN") {
+    return NextResponse.json(
+      { error: "Forbidden – only admins can delete tasks" },
+      { status: 403 }
+    )
+  }
+
+  await prisma.task.delete({ where: { id: taskId } })
+
+  return NextResponse.json({ success: true })
+}

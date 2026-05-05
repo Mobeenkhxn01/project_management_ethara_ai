@@ -53,23 +53,23 @@ export default async function Page({ params }: PageProps) {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       {/* Project Info */}
-      <div className="rounded-2xl border bg-gradient-to-r from-indigo-950 via-blue-950 to-purple-950 p-6 text-white">
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge className="bg-white/20 text-white hover:bg-white/20">Project Workspace</Badge>
-          <Badge className="bg-white/10 text-white hover:bg-white/10">
+      <div className="rounded-2xl border bg-linear-to-r from-indigo-950 via-blue-950 to-purple-950 p-4 sm:p-6 text-white">
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <Badge className="bg-white/20 text-white hover:bg-white/20 text-xs sm:text-sm">Project Workspace</Badge>
+          <Badge className="bg-white/10 text-white hover:bg-white/10 text-xs sm:text-sm">
             {project.members.length} Member(s)
           </Badge>
-          <Badge className="bg-white/10 text-white hover:bg-white/10">
+          <Badge className="bg-white/10 text-white hover:bg-white/10 text-xs sm:text-sm">
             {project.tasks.length} Task(s)
           </Badge>
         </div>
-        <h1 className="mt-3 text-3xl font-bold">{project.name}</h1>
-        <p className="mt-1 text-slate-200">
+        <h1 className="text-2xl sm:text-3xl font-bold line-clamp-2">{project.name}</h1>
+        <p className="mt-2 text-xs sm:text-sm text-slate-200 line-clamp-3">
           {project.description || "No description provided"}
         </p>
-        <p className="text-sm mt-3 text-slate-100">
+        <p className="text-xs sm:text-sm mt-3 text-slate-100">
           Your Role: <span className="font-semibold">{currentMember.role}</span>
         </p>
       </div>

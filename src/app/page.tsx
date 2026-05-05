@@ -35,7 +35,7 @@ export default function Home() {
 
           <div className="w-full flex justify-center">
             <Image
-              src="/dashboard-preview.png"
+              src="/dashboard-hero.png"
               alt="Dashboard Preview"
               width={900}
               height={500}

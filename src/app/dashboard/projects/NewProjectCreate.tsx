@@ -14,8 +14,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
 import { useState } from "react"
-import axios, { AxiosError } from "axios"
 import { toast } from "sonner"
+import { useCreateProject } from "@/hooks/useCreateProject"
 
 interface Props {
   open: boolean
@@ -27,7 +27,7 @@ export default function CreateProjectDialog({ open, setOpen }: Props) {
     name: "",
     description: "",
   })
-  const [loading, setLoading] = useState(false)
+  const createProject = useCreateProject()
 
   const handleChange = (key: string, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -42,24 +42,12 @@ export default function CreateProjectDialog({ open, setOpen }: Props) {
     }
 
     try {
-      setLoading(true)
-
-      const res = await axios.post("/api/projects", form)
-
-      if (res.data.success) {
-        toast.success("Project created successfully")
-
-        // reset form
-        setForm({ name: "", description: "" })
-
-        // close dialog
-        setOpen(false)
-      }
-    } catch (err) {
-      const error = err as AxiosError<{ error?: string }>
-      toast.error(error.response?.data?.error || "Something went wrong")
-    } finally {
-      setLoading(false)
+      await createProject.mutateAsync(form)
+      toast.success("Project created successfully")
+      setForm({ name: "", description: "" })
+      setOpen(false)
+    } catch {
+      toast.error("Failed to create project")
     }
   }
 
@@ -79,6 +67,7 @@ export default function CreateProjectDialog({ open, setOpen }: Props) {
                 placeholder="e.g. Task Manager App"
                 value={form.name}
                 onChange={(e) => handleChange("name", e.target.value)}
+                disabled={createProject.isPending}
               />
             </Field>
 
@@ -89,6 +78,7 @@ export default function CreateProjectDialog({ open, setOpen }: Props) {
                 placeholder="Optional description..."
                 value={form.description}
                 onChange={(e) => handleChange("description", e.target.value)}
+                disabled={createProject.isPending}
               />
             </Field>
           </FieldGroup>
@@ -98,12 +88,13 @@ export default function CreateProjectDialog({ open, setOpen }: Props) {
               type="button"
               variant="outline"
               onClick={() => setOpen(false)}
+              disabled={createProject.isPending}
             >
               Cancel
             </Button>
 
-            <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create Project"}
+            <Button type="submit" disabled={createProject.isPending}>
+              {createProject.isPending ? "Creating..." : "Create Project"}
             </Button>
           </DialogFooter>
         </form>
