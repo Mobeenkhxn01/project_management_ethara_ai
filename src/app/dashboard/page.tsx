@@ -110,7 +110,7 @@ async function DashboardPage() {
               </p>
             </div>
             <Image
-              src="/dashboard-hero"
+              src="/dashboard-hero.svg"
               alt="Dashboard analytics visual"
               width={1200}
               height={420}

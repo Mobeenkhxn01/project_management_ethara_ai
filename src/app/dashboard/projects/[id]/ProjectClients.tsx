@@ -45,18 +45,30 @@ export default function ProjectClient({
   const deleteTask = useDeleteTaskMutation();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: project, isLoading, isError } = useProject(projectId, initialProject);
+  const {
+    data: project,
+    isLoading,
+    isError,
+  } = useProject(projectId, initialProject);
 
   if (isLoading) {
-    return <div className="rounded-xl border bg-card p-6 text-sm text-muted-foreground">Loading project details...</div>;
+    return (
+      <div className="rounded-xl border bg-card p-6 text-sm text-muted-foreground">
+        Loading project details...
+      </div>
+    );
   }
 
   if (isError || !project) {
-    return <div className="rounded-xl border bg-card p-6 text-sm text-red-500">Unable to load project details.</div>;
+    return (
+      <div className="rounded-xl border bg-card p-6 text-sm text-red-500">
+        Unable to load project details.
+      </div>
+    );
   }
 
   const currentMember = project.members.find(
-    (member: { userId: string; role: string }) => member.userId === userId
+    (member: { userId: string; role: string }) => member.userId === userId,
   );
   const isAdmin = currentMember?.role === "ADMIN";
 
@@ -101,7 +113,8 @@ export default function ProjectClient({
 
   const getStatusBadge = (status: string) => {
     if (status === "DONE") return <Badge>Done</Badge>;
-    if (status === "IN_PROGRESS") return <Badge variant="secondary">In Progress</Badge>;
+    if (status === "IN_PROGRESS")
+      return <Badge variant="secondary">In Progress</Badge>;
     return <Badge variant="outline">To Do</Badge>;
   };
 
@@ -114,8 +127,16 @@ export default function ProjectClient({
   return (
     <>
       {/* Dialogs */}
-      <AddMember open={openMember} setOpen={setOpenMember} projectId={projectId} />
-      <AssignTaskDialog open={openTask} setOpen={setOpenTask} project={project} />
+      <AddMember
+        open={openMember}
+        setOpen={setOpenMember}
+        projectId={projectId}
+      />
+      <AssignTaskDialog
+        open={openTask}
+        setOpen={setOpenTask}
+        project={project}
+      />
 
       <div className="space-y-4 sm:space-y-6">
         {/* Admin Action Cards */}
@@ -124,7 +145,9 @@ export default function ProjectClient({
             <div className="rounded-xl border bg-card p-3 sm:p-4 shadow-sm hover:shadow-md transition">
               <div className="mb-3 flex items-center gap-2">
                 <UsersIcon className="size-4 text-indigo-600" />
-                <h2 className="text-sm sm:text-base font-semibold">Add Member</h2>
+                <h2 className="text-sm sm:text-base font-semibold">
+                  Add Member
+                </h2>
               </div>
               <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
                 Invite teammates to this project.
@@ -140,7 +163,9 @@ export default function ProjectClient({
             <div className="rounded-xl border bg-card p-3 sm:p-4 shadow-sm hover:shadow-md transition">
               <div className="mb-3 flex items-center gap-2">
                 <ClipboardListIcon className="size-4 text-orange-500" />
-                <h2 className="text-sm sm:text-base font-semibold">Assign Task</h2>
+                <h2 className="text-sm sm:text-base font-semibold">
+                  Assign Task
+                </h2>
               </div>
               <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
                 Create and assign tasks to members.
@@ -157,22 +182,28 @@ export default function ProjectClient({
             <div className="rounded-xl border border-red-200 bg-card p-3 sm:p-4 shadow-sm hover:shadow-md transition">
               <div className="mb-3 flex items-center gap-2">
                 <Trash2Icon className="size-4 text-red-500" />
-                <h2 className="text-sm sm:text-base font-semibold">Delete Project</h2>
+                <h2 className="text-sm sm:text-base font-semibold">
+                  Delete Project
+                </h2>
               </div>
               <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
                 Permanently delete this project and all its tasks.
               </p>
               <AlertDialog>
-                <AlertDialogTrigger>
-                  <Button className="w-full bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg transition-all" disabled={deleteProject.isPending}>
+                <AlertDialogTrigger render={<Button
+                    className="w-full bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg transition-all"
+                    disabled={deleteProject.isPending}
+                  >
                     Delete Project
-                  </Button>
-                </AlertDialogTrigger>
+                  </Button>} />
+                  
+               
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Delete Project?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This will permanently delete the project along with all members and tasks. This action cannot be undone.
+                      This will permanently delete the project along with all
+                      members and tasks. This action cannot be undone.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -201,27 +232,33 @@ export default function ProjectClient({
                   className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border rounded-md px-3 py-2 bg-white/70 dark:bg-zinc-900 text-sm"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium truncate">{m.user.name ?? "Unnamed user"}</p>
-                    <p className="text-xs text-muted-foreground truncate">{m.user.email}</p>
+                    <p className="font-medium truncate">
+                      {m.user.name ?? "Unnamed user"}
+                    </p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {m.user.email}
+                    </p>
                   </div>
                   <div className="flex items-center gap-2 flex-wrap justify-end">
                     <Badge variant="outline">{m.role}</Badge>
                     {isAdmin && m.userId !== userId && (
                       <AlertDialog>
-                        <AlertDialogTrigger>
-                          <Button
+                        <AlertDialogTrigger render={<Button
                             size="sm"
                             className="bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 h-7"
                             disabled={removeMember.isPending}
                           >
                             <Trash2Icon className="size-3.5" />
-                          </Button>
-                        </AlertDialogTrigger>
+                          </Button>} />
+                          
+                    
                         <AlertDialogContent>
                           <AlertDialogHeader>
                             <AlertDialogTitle>Remove Member?</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Remove <strong>{m.user.name}</strong> from this project? Their tasks will remain but they will lose access.
+                              Remove <strong>{m.user.name}</strong> from this
+                              project? Their tasks will remain but they will
+                              lose access.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
@@ -270,33 +307,39 @@ export default function ProjectClient({
                   <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
                     {getPriorityBadge(task.priority)}
                     {getStatusBadge(task.status)}
-                    {(task.assigneeId === userId || isAdmin) && task.status !== "DONE" && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => markTaskDone(task.id)}
-                        disabled={updateTask.isPending}
-                        className="text-xs"
-                      >
-                        Mark Done
-                      </Button>
-                    )}
+                    {(task.assigneeId === userId || isAdmin) &&
+                      task.status !== "DONE" && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => markTaskDone(task.id)}
+                          disabled={updateTask.isPending}
+                          className="text-xs"
+                        >
+                          Mark Done
+                        </Button>
+                      )}
                     {isAdmin && (
                       <AlertDialog>
-                        <AlertDialogTrigger>
-                          <Button
-                            size="sm"
-                            className="bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 h-7"
-                            disabled={deleteTask.isPending}
-                          >
-                            <Trash2Icon className="size-3.5" />
-                          </Button>
-                        </AlertDialogTrigger>
+                        <AlertDialogTrigger
+                          render={
+                            <Button
+                              size="sm"
+                              className="bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 h-7"
+                              disabled={deleteTask.isPending}
+                            >
+                              <Trash2Icon className="size-3.5" />
+                            </Button>
+                          }
+                        />
+                        ]
                         <AlertDialogContent>
                           <AlertDialogHeader>
                             <AlertDialogTitle>Delete Task?</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Are you sure you want to delete <strong>{task.title}</strong>? This cannot be undone.
+                              Are you sure you want to delete{" "}
+                              <strong>{task.title}</strong>? This cannot be
+                              undone.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
@@ -315,7 +358,9 @@ export default function ProjectClient({
                 </li>
               ))}
               {project.tasks.length === 0 && (
-                <li className="text-xs sm:text-sm text-muted-foreground text-center py-4">No tasks found yet.</li>
+                <li className="text-xs sm:text-sm text-muted-foreground text-center py-4">
+                  No tasks found yet.
+                </li>
               )}
             </ul>
           </div>

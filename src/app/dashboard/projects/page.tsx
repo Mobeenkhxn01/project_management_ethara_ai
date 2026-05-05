@@ -90,8 +90,7 @@ export default function ProjectsPage() {
                   {isAdmin && (
                     <div className="border-t p-3 sm:p-4">
                       <AlertDialog>
-                        <AlertDialogTrigger>
-                          <Button
+                        <AlertDialogTrigger render={<Button
                             size="sm"
                             className="w-full bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg transition-all gap-2"
                             disabled={deleteProject.isPending}
@@ -100,8 +99,9 @@ export default function ProjectsPage() {
                             <Trash2Icon className="size-4" />
                             <span className="hidden sm:inline">Delete Project</span>
                             <span className="sm:hidden">Delete</span>
-                          </Button>
-                        </AlertDialogTrigger>
+                          </Button>}/>
+                          
+                    
                         <AlertDialogContent>
                           <AlertDialogHeader>
                             <AlertDialogTitle>Delete Project?</AlertDialogTitle>
