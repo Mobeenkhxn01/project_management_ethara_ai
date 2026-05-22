@@ -39,6 +39,7 @@ export default function Home() {
               alt="Dashboard Preview"
               width={900}
               height={500}
+              priority
               className="rounded-xl border shadow-lg"
             />
           </div>

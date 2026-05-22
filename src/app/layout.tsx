@@ -18,7 +18,16 @@ export const metadata: Metadata = {
   description: "A simple project management tool built with Next.js, Prisma and BetterAuth.",
   icons: "/dashboard-hero.svg",
   keywords: ["project management", "task management", "ethara ai project management", "next.js", "prisma", "betterauth" ],
-  
+  authors: [{ name: "Mobeen Khan", url: "https://developermobeen7.vercel.app" }],
+  creator: "Mobeen Khan",
+  publisher: "Mobeen Khan",
+  applicationName: "Project Management System",
+  openGraph: {
+    title: "Project Management System",
+    description: "Project Management System for Ethara AI",
+    images: "/dashboard-hero.png",
+  },
+
 };
 
 export default function RootLayout({
